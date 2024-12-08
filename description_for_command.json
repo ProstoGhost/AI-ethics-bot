@@ -1,0 +1,20 @@
+{
+    "descriptions":[
+        {
+            "command_name": "/info",
+            "description": "Информация о боте"
+        },
+        {
+            "command_name": "/generate",
+            "description": "Начало игры"
+        },
+        {
+            "command_name": "/cards",
+            "description": "Список карточек"
+        },
+        {
+            "command_name": "/cancel",
+            "description": "Отмена"
+        }
+    ]
+}
