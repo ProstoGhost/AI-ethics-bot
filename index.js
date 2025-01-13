@@ -155,6 +155,8 @@ const start = () => {
 
             await SendMessage(CurrentStatus[chatId], 100, chatId);
 
+            console.log(CurrentStatus[chatId])
+
             return;
         }
 
@@ -303,6 +305,8 @@ const start = () => {
 
                 await SendMessage(CreateText(text), 5000, chatId);
 
+                await SwitchGameStatus(chatId);
+
             }
             if(ValidatePairs(text) && ParseStringToArray(text).length === 0){
                 
@@ -318,7 +322,7 @@ const start = () => {
             return;
         }
 
-        if (!regex.test(text) && CurrentStatus[chatId] && ParseStringToArray(text).length === 0){
+        if (!regex.test(text) && ((CurrentStatus[chatId] != undefined) && (CurrentStatus[chatId] != false)) && ParseStringToArray(text).length === 0){
 
             await SendMessage('Недопустимые значения. проверьте правильность введёных чисел', 500, chatId);
             return;
