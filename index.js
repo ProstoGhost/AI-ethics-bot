@@ -25,13 +25,6 @@ const start = () => {
         const text = msg.text.toLocaleLowerCase();
         const chatId = msg.chat.id;
 
-        async function SwitchGameStatus(idchat) { //свич текущего статуса типо чел играет или нет.
-
-            await CurrentStatus[idchat] === (false || undefined) ? CurrentStatus[idchat] = true : CurrentStatus[idchat] = false;
-        
-            return CurrentStatus[idchat];
-        }
-
         async function setStatus(chatId, status) { //функция для установки статуса
             CurrentStatus[chatId] = status;
         }
@@ -154,8 +147,6 @@ const start = () => {
         if (text === 'status') {
 
             await SendMessage(getStatus(chatId), 100, chatId);
-
-            console.log(getStatus(chatId))
 
             return;
         }
