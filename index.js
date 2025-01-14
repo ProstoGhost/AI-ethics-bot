@@ -32,6 +32,14 @@ const start = () => {
             return CurrentStatus[idchat];
         }
 
+        async function setStatus(chatId, status) { //функция для установки статуса
+            CurrentStatus[chatId] = status;
+        }
+
+        function getStatus(chatId) { // фнукция проверки статуса и отсечение всяких undefined
+            return CurrentStatus[chatId] !== undefined ? CurrentStatus[chatId] : false;
+        }
+
         function SendMessage(message, delay, idchat) { // функция для отправки сообщений с задержкой.
             return new Promise((resolve) => {
                 setTimeout(()=>{
@@ -91,17 +99,7 @@ const start = () => {
 
                 await SendMessage(Text_for_start.instruction, 500, chatId);
 
-                if (CurrentStatus[chatId]) {
-                    
-                    return;
-
-                }
-                else{
-
-                    await SwitchGameStatus(chatId);
-
-                    return;
-                }
+                await setStatus(chatId, true);
             }
 
             SendGameInfo();
@@ -123,7 +121,7 @@ const start = () => {
 
             if (CurrentStatus[chatId]) {
                     
-                await SwitchGameStatus(chatId);
+                await setStatus(chatId, false);
 
                 await SendMessage('Отмена генерации ответа.', 500, chatId);
 
@@ -132,6 +130,8 @@ const start = () => {
             }
 
             await SendMessage('Отмена генерации ответа.', 500, chatId);
+
+            await setStatus(chatId, false);
 
             return;
         }
@@ -153,9 +153,9 @@ const start = () => {
 
         if (text === 'status') {
 
-            await SendMessage(CurrentStatus[chatId], 100, chatId);
+            await SendMessage(getStatus(chatId), 100, chatId);
 
-            console.log(CurrentStatus[chatId])
+            console.log(getStatus(chatId))
 
             return;
         }
@@ -168,7 +168,7 @@ const start = () => {
 
         }
 
-        if (regex.test(text) && CurrentStatus[chatId]) {
+        if (regex.test(text) && getStatus(chatId)) {
 
             function ValidatePairs(text) { //проверка на противоположности
 
@@ -305,7 +305,7 @@ const start = () => {
 
                 await SendMessage(CreateText(text), 5000, chatId);
 
-                await SwitchGameStatus(chatId);
+                await setStatus(chatId, false);
 
             }
             if(ValidatePairs(text) && ParseStringToArray(text).length === 0){
@@ -322,7 +322,7 @@ const start = () => {
             return;
         }
 
-        if (!regex.test(text) && ((CurrentStatus[chatId] != undefined) && (CurrentStatus[chatId] != false)) && ParseStringToArray(text).length === 0){
+        if (!regex.test(text) && getStatus(chatId) && ParseStringToArray(text).length === 0){
 
             await SendMessage('Недопустимые значения. проверьте правильность введёных чисел', 500, chatId);
             return;
