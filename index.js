@@ -79,9 +79,11 @@ const start = () => {
             return [...new Set(numbers)]; // чистим от повторов
         }
 
-        if (text === '/start') {
+        if (text === '/start' && !getStatus(chatId)) {
 
-            await SendMessage("Добро пожаловать в бота который помогает нейро сети с ответом. Для начала игры напиши команду /generate. Если хочешь лучше понять правила: /info", 1000, chatId)
+            await SendMessage("Добро пожаловать в бота который помогает нейро сети с ответом. Для начала игры напиши команду /generate. Если хочешь лучше понять правила: /info", 1000, chatId);
+
+            return
         }
 
         if (text === '/generate') {
@@ -318,6 +320,8 @@ const start = () => {
             await SendMessage('Недопустимые значения. проверьте правильность введёных чисел', 500, chatId);
             return;
         }
+
+        return
 
     })
 
