@@ -1,9 +1,10 @@
 const ENV = require('dotenv').config();
 const TelegramAPI = require('node-telegram-bot-api');
 
-const Description_for_command = require('./description_for_command.json');
-const Text_for_start = require('./text_for_start.json');
-const Card_texts = require('./сard_texts.json');
+const Description_for_command = require('./description_for_command.json'); //список всех команд и их описание
+const Text_for_start = require('./text_for_start.json'); // текст для запроса, список контров, и названия карточек
+const Card_texts = require('./сard_texts.json'); //текст карточек
+const DescrForCmd = require('./responses_to_commands.json'); // тексты которые бот пишет в ответ на команду
 
 const bot = new TelegramAPI(process.env.TOKEN,{polling: true});
 
@@ -46,7 +47,7 @@ const start = () => {
 
             const cards = Text_for_start.cards
                 .map((e, index) => `${index}. ${e}`)
-                .join('\n');
+                .join('\n\n');
 
             return cards;
 
@@ -81,7 +82,7 @@ const start = () => {
 
         if (text === '/start' && !getStatus(chatId)) {
 
-            await SendMessage("Добро пожаловать в бота который помогает нейро сети с ответом. Для начала игры напиши команду /generate. Если хочешь лучше понять правила: /info", 1000, chatId);
+            await SendMessage(DescrForCmd.start, 1000, chatId);
 
             return
         }
@@ -104,7 +105,7 @@ const start = () => {
 
         if (text === '/cards') {
 
-            await SendMessage('Вот список Карточек:', 1000, chatId);
+            await SendMessage(DescrForCmd.cards, 1000, chatId);
 
             await SendMessage(CardsList(), 1000, chatId);
 
@@ -114,7 +115,7 @@ const start = () => {
 
         if (text === '/cancel') {
 
-            if (CurrentStatus[chatId]) {
+            if (getStatus(chatId)) {
                     
                 await setStatus(chatId, false);
 
@@ -133,17 +134,8 @@ const start = () => {
 
         if (text === '/info') {
 
-            await SendMessage('Привет. В данном боте игре вам предстоит в роли разработчика решить на какие карточки стоит опиратся при генерации ответа', 500, chatId);
+            await SendMessage(DescrForCmd.info, 500, chatId);
 
-            await SendMessage('Вот несколько правил/советов как пользоваться данным ботом:', 500, chatId);
-
-            await SendMessage('1. Вы можете указать любое колличество карточек. Пробуйте любые комбинации и смотрите что из этого получится', 500, chatId);
-
-            await SendMessage('2. Не все карточки сочетаются друг с другом, это стоит учитывать при выборе', 500, chatId);
-
-            await SendMessage('3. Вы можете указывать карточки через точку, запятую или пробел. Так же все числа и буквы не соответсвующие номерам карточек будут автоматически игнорированы', 500, chatId);
-
-            await SendMessage('4. Список карточек можно узнать по комманде "/cards"', 500, chatId);
         }
 
         if (text === 'status') {
