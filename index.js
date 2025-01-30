@@ -37,7 +37,7 @@ const start = () => {
         function SendMessage(message, delay, idchat) { // функция для отправки сообщений с задержкой.
             return new Promise((resolve) => {
                 setTimeout(()=>{
-                    bot.sendMessage(idchat, message);
+                    bot.sendMessage(idchat, message, {parse_mode: 'Markdown'});
                     resolve();
                 }, delay);
             });
